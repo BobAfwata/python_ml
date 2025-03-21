@@ -1,13 +1,18 @@
 # coding: utf-8
 # cf.http://d.hatena.ne.jp/white_wheels/20100327/p3
+# A program to Calculate and plot the 2D gradient  Curve
+# Bob Afwata <bafwata@gmail.com>
+# 21/3/2025
+
+#import the numpy ,matplotlib and mpl_toolkits for 3D visualization
 import numpy as np
 import matplotlib.pylab as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-
+#function to calculate the numerical gradient.
 def _numerical_gradient_no_batch(f, x):
     h = 1e-4 # 0.0001
-    grad = np.zeros_like(x) # x와 형상이 같은 배열을 생성
+    grad = np.zeros_like(x) # adding zeros to the vector.
     
     for idx in range(x.size):
         tmp_val = x[idx]
@@ -19,8 +24,9 @@ def _numerical_gradient_no_batch(f, x):
         # f(x-h) 계산
         x[idx] = tmp_val - h 
         fxh2 = f(x) 
-        
-        grad[idx] = (fxh1 - fxh2) / (2*h)
+        # calculating the final gradient using the formulae  
+        #  gradient = (f(xh1) -f(xh2) )/ 2 *h  
+        grad[idx] = (fxh1 - fxh2) / (2*h) 
         x[idx] = tmp_val # 값 복원
         
     return grad
@@ -52,6 +58,7 @@ def tangent_line(f, x):
     return lambda t: d*t + y
      
 if __name__ == '__main__':
+    #input vectors x0 and x1
     x0 = np.arange(-2, 2.5, 0.25)
     x1 = np.arange(-2, 2.5, 0.25)
     X, Y = np.meshgrid(x0, x1)
@@ -67,6 +74,7 @@ if __name__ == '__main__':
     plt.ylim([-2, 2])
     plt.xlabel('x0')
     plt.ylabel('x1')
+    plt.title("A graph of the 2D gradient of the function")
     plt.grid()
     plt.legend()
     plt.draw()

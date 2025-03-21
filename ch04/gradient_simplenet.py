@@ -1,13 +1,16 @@
 # coding: utf-8
+#Program to design a simplenet using softmax ans cross entropy activation functions
+# Bob Afwata <bafwata@gmail.com>
+# 21/3/2025
 import sys, os
 sys.path.append(os.pardir)  # 부모 디렉터리의 파일을 가져올 수 있도록 설정
 import numpy as np
 from common.functions import softmax, cross_entropy_error
 from common.gradient import numerical_gradient
 
-
+#initialize the simplenet class 
 class simpleNet:
-    def __init__(self):
+    def __init__(self): # simplenet constructor 
         self.W = np.random.randn(2,3) # 정규분포로 초기화
 
     def predict(self, x):
@@ -16,7 +19,7 @@ class simpleNet:
     def loss(self, x, t):
         z = self.predict(x)
         y = softmax(z)
-        loss = cross_entropy_error(y, t)
+        loss = cross_entropy_error(y, t) # calculating the loss factor.
 
         return loss
 

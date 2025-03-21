@@ -1,20 +1,23 @@
-# coding: utf-8
+# Program to Train an simple Two layer neuralnet
+#Bob Afwata <bafwata@gmail.com>
+# 21/3/2025
+
 import sys, os
-sys.path.append(os.pardir)  # 부모 디렉터리의 파일을 가져올 수 있도록 설정
+sys.path.append(os.pardir)  
 import numpy as np
 import matplotlib.pyplot as plt
-from dataset.mnist import load_mnist
+from dataset.mnist import load_mnist #importing and loading the MNIST data 
 from two_layer_net import TwoLayerNet
 
 # 데이터 읽기
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
-
+# Creating a two layer Neural Network with input size of 784 , 50 hidden layer,and 10 outputs
 network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
 
-# 하이퍼파라미터
-iters_num = 10000  # 반복 횟수를 적절히 설정한다.
+# Train the model for 10000 iterations 
+iters_num = 10000  #
 train_size = x_train.shape[0]
-batch_size = 100   # 미니배치 크기
+batch_size = 100   # Batch size of 100
 learning_rate = 0.1
 
 train_loss_list = []
@@ -42,7 +45,7 @@ for i in range(iters_num):
     loss = network.loss(x_batch, t_batch)
     train_loss_list.append(loss)
     
-    # 1에폭당 정확도 계산
+     # Train the Network 
     if i % iter_per_epoch == 0:
         train_acc = network.accuracy(x_train, t_train)
         test_acc = network.accuracy(x_test, t_test)
@@ -59,4 +62,5 @@ plt.xlabel("epochs")
 plt.ylabel("accuracy")
 plt.ylim(0, 1.0)
 plt.legend(loc='lower right')
+plt.title("A Graph ot the Accuracy and Epochs of a 2 Layer Nueral Network")
 plt.show()

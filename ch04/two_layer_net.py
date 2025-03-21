@@ -1,15 +1,17 @@
-# coding: utf-8
+# Python Module for a two layer Neural Network
+# Bob Afwata <bafwata@gmail.com>
+# 21/3/2025
 import sys, os
 sys.path.append(os.pardir)  # 부모 디렉터리의 파일을 가져올 수 있도록 설정
 from common.functions import *
 from common.gradient import numerical_gradient
 
-
+# Two layer network class initialization
 class TwoLayerNet:
-
+    #Cnstructor with the input size ,hidden size,output and weights
     def __init__(self, input_size, hidden_size, output_size, weight_init_std=0.01):
         # 가중치 초기화
-        self.params = {}
+        self.params = {}  # weights and biasses for the input layer
         self.params['W1'] = weight_init_std * np.random.randn(input_size, hidden_size)
         self.params['b1'] = np.zeros(hidden_size)
         self.params['W2'] = weight_init_std * np.random.randn(hidden_size, output_size)
@@ -19,19 +21,20 @@ class TwoLayerNet:
         W1, W2 = self.params['W1'], self.params['W2']
         b1, b2 = self.params['b1'], self.params['b2']
     
-        a1 = np.dot(x, W1) + b1
-        z1 = sigmoid(a1)
+        a1 = np.dot(x, W1) + b1  # claculating the inner parameters
+        z1 = sigmoid(a1)       #aplying the sigmoid activation fuction 
+                               #to the output vectors to convert it to output probabilities
         a2 = np.dot(z1, W2) + b2
-        y = softmax(a2)
+        y = softmax(a2)  # applying softmax fucntion to get the output y 
         
         return y
         
-    # x : 입력 데이터, t : 정답 레이블
+    # function to Calculate the cross entropy errot 
     def loss(self, x, t):
         y = self.predict(x)
         
         return cross_entropy_error(y, t)
-    
+    #Function to calculate the accuracy of the 2 layer network
     def accuracy(self, x, t):
         y = self.predict(x)
         y = np.argmax(y, axis=1)
@@ -40,7 +43,7 @@ class TwoLayerNet:
         accuracy = np.sum(y == t) / float(x.shape[0])
         return accuracy
         
-    # x : 입력 데이터, t : 정답 레이블
+    # Function to evaluate the Numerical gradients.
     def numerical_gradient(self, x, t):
         loss_W = lambda W: self.loss(x, t)
         
@@ -59,13 +62,13 @@ class TwoLayerNet:
         
         batch_num = x.shape[0]
         
-        # forward
+        # forward propagation in the network
         a1 = np.dot(x, W1) + b1
         z1 = sigmoid(a1)
         a2 = np.dot(z1, W2) + b2
         y = softmax(a2)
         
-        # backward
+        # backward propagation in the network
         dy = (y - t) / batch_num
         grads['W2'] = np.dot(z1.T, dy)
         grads['b2'] = np.sum(dy, axis=0)
