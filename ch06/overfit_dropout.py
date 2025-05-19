@@ -1,4 +1,6 @@
-# coding: utf-8
+# Python program to test overfit dropout while training
+# Bob Afwata <bafwata@gmai.com>
+# 29/3/2029
 import os
 import sys
 sys.path.append(os.pardir)  # 부모 디렉터리의 파일을 가져올 수 있도록 설정
@@ -8,6 +10,7 @@ from dataset.mnist import load_mnist
 from common.multi_layer_net_extend import MultiLayerNetExtend
 from common.trainer import Trainer
 
+#load the mnist data and divide into training ans test samples.
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True)
 
 # 오버피팅을 재현하기 위해 학습 데이터 수를 줄임
@@ -15,16 +18,21 @@ x_train = x_train[:300]
 t_train = t_train[:300]
 
 # 드롭아웃 사용 유무와 비울 설정 ========================
+# set the use dropout to True / allow use of dropout.
 use_dropout = True  # 드롭아웃을 쓰지 않을 때는 False
-dropout_ratio = 0.2
+dropout_ratio = 0.2 #set dropout rate to 0.2.
 # ====================================================
 
+#instantiate the MultilayerNetExtend network , use input of 784,100 hidden layers and output of 10.
+# Allow the use of dropout and set dropout ratio to 0.2
 network = MultiLayerNetExtend(input_size=784, hidden_size_list=[100, 100, 100, 100, 100, 100],
                               output_size=10, use_dropout=use_dropout, dropout_ration=dropout_ratio)
+#instantiate the trainer using the network ,test and training data ,epoch of 301 and batch size  of 100.
+#Use 'sgd' Optimizer, set th verbose to True(so as to show all the log messages of the training)
 trainer = Trainer(network, x_train, t_train, x_test, t_test,
                   epochs=301, mini_batch_size=100,
                   optimizer='sgd', optimizer_param={'lr': 0.01}, verbose=True)
-trainer.train()
+trainer.train() # train the network.
 
 train_acc_list, test_acc_list = trainer.train_acc_list, trainer.test_acc_list
 
@@ -33,6 +41,7 @@ markers = {'train': 'o', 'test': 's'}
 x = np.arange(len(train_acc_list))
 plt.plot(x, train_acc_list, marker='o', label='train', markevery=10)
 plt.plot(x, test_acc_list, marker='s', label='test', markevery=10)
+#plot the graph of epoch vs accuracy
 plt.xlabel("epochs")
 plt.ylabel("accuracy")
 plt.ylim(0, 1.0)

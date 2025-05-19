@@ -1,4 +1,8 @@
-# coding: utf-8
+# Python code to run optimizers and compare their effects on model training.
+# Bob Afwata <bafwata@gmail.com>
+# 29/3/2025.
+
+#importing numpy ,matplotlib collections and optimizers
 import sys, os
 sys.path.append(os.pardir)  # 부모 디렉터리의 파일을 가져올 수 있도록 설정
 import numpy as np
@@ -20,7 +24,7 @@ params['x'], params['y'] = init_pos[0], init_pos[1]
 grads = {}
 grads['x'], grads['y'] = 0, 0
 
-
+# instantiating the optimizers SGD, Momentum,AdaGrad, Adam.
 optimizers = OrderedDict()
 optimizers["SGD"] = SGD(lr=0.95)
 optimizers["Momentum"] = Momentum(lr=0.1)
@@ -28,9 +32,9 @@ optimizers["AdaGrad"] = AdaGrad(lr=1.5)
 optimizers["Adam"] = Adam(lr=0.3)
 
 idx = 1
-
+#run the various optimizers and update the parameters and gradients
 for key in optimizers:
-    optimizer = optimizers[key]
+    optimizer = optimizers[key] #list of optimizers
     x_history = []
     y_history = []
     params['x'], params['y'] = init_pos[0], init_pos[1]
@@ -43,7 +47,7 @@ for key in optimizers:
         optimizer.update(params, grads)
     
 
-    x = np.arange(-10, 10, 0.01)
+    x = np.arange(-10, 10, 0.01) #create a list of 10 items for x and y
     y = np.arange(-5, 5, 0.01)
     
     X, Y = np.meshgrid(x, y) 
@@ -54,6 +58,7 @@ for key in optimizers:
     Z[mask] = 0
     
     # 그래프 그리기
+    #plt.title("Graph to Show the comparison of varius Optimizers")
     plt.subplot(2, 2, idx)
     idx += 1
     plt.plot(x_history, y_history, 'o-', color="red")

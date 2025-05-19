@@ -1,17 +1,21 @@
-# coding: utf-8
+# Training a simple two layer Neural network
+#Bob Afwata <bafwata@gmail.com>
+# 25/03/2025
 import sys, os
 sys.path.append(os.pardir)
 
 import numpy as np
-from dataset.mnist import load_mnist
+from dataset.mnist import load_mnist # importing and loading mnist dataset.
 from two_layer_net import TwoLayerNet
 
 # 데이터 읽기
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
+#instantiating the Two layer neural network from the imported TwoLayerNet Module.
 network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
 
-iters_num = 10000
+#number of iterations for the training
+iters_num = 100000
 train_size = x_train.shape[0]
 batch_size = 100
 learning_rate = 0.1

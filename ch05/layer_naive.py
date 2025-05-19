@@ -1,4 +1,5 @@
-# coding: utf-8
+# A simple Naive layer network with multiplication and Addition
+# Backward and forward propagation implemenations.
 
 
 class MulLayer:

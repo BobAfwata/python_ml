@@ -1,4 +1,6 @@
-# coding: utf-8
+# Python Module for the two layer network
+# Bob Afwata <bafwata@gmail.com>
+# 25/03/2025
 import sys, os
 sys.path.append(os.pardir)  # 부모 디렉터리의 파일을 가져올 수 있도록 설정
 import numpy as np
@@ -7,8 +9,9 @@ from common.gradient import numerical_gradient
 from collections import OrderedDict
 
 
+#Two Layer Network class
 class TwoLayerNet:
-
+     # TwoLayerNet constructor with the weights and biases instantiated.
     def __init__(self, input_size, hidden_size, output_size, weight_init_std = 0.01):
         # 가중치 초기화
         self.params = {}
@@ -18,32 +21,33 @@ class TwoLayerNet:
         self.params['b2'] = np.zeros(output_size)
 
         # 계층 생성
+        # Activation fucntions Affine,Relu and Softmax Instances.
         self.layers = OrderedDict()
         self.layers['Affine1'] = Affine(self.params['W1'], self.params['b1'])
         self.layers['Relu1'] = Relu()
         self.layers['Affine2'] = Affine(self.params['W2'], self.params['b2'])
 
         self.lastLayer = SoftmaxWithLoss()
-        
+    #function for prediction.  
     def predict(self, x):
         for layer in self.layers.values():
             x = layer.forward(x)
         
         return x
-        
+    # Loss function calculation.  
     # x : 입력 데이터, t : 정답 레이블
     def loss(self, x, t):
         y = self.predict(x)
         return self.lastLayer.forward(y, t)
     
-    def accuracy(self, x, t):
+    def accuracy(self, x, t):  # Accuracy calculation
         y = self.predict(x)
         y = np.argmax(y, axis=1)
         if t.ndim != 1 : t = np.argmax(t, axis=1)
         
         accuracy = np.sum(y == t) / float(x.shape[0])
         return accuracy
-        
+    # Calculation of the Numerial gradients   
     # x : 입력 데이터, t : 정답 레이블
     def numerical_gradient(self, x, t):
         loss_W = lambda W: self.loss(x, t)
